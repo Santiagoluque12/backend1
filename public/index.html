@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Registrarse</title>
+</head>
+
+<body>
+    <h1>Registrarse</h1>
+
+    <form class="target" id="botonform">
+        <label for="nombre">
+            Nombre
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre completo" autocomplete="name"
+                required>
+        </label>
+
+        <label for="edad">
+            Edad
+            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" autocomplete="bday-year" required>
+        </label>
+
+        <label for="email">
+            Email
+            <input type="email" id="email" name="email" placeholder="Ingrese su email" autocomplete="username" required>
+        </label>
+
+        <label for="password">
+            Contraseña
+            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña"
+                autocomplete="new-password" required>
+        </label>
+
+        <label for="numero">
+            Numero
+            <input type="text" id="telefono" name="numero" placeholder="Ingrese su numero de telefono" autocomplete="mobile" required>
+        </label>
+
+        <button type="submit">Registrarse</button>
+    </form>
+    <script src="./script.js"></script>
+</body>
+
+
+</html>

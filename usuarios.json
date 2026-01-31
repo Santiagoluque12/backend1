@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": 1769490692374,
+    "nombre": "Santiago Luque",
+    "edad": "65",
+    "email": "santiluke12@gmail.com",
+    "password": "dsadas",
+    "numero": "132165465"
+  },
+  {
+    "id": 1769491266131,
+    "nombre": "dsadsa",
+    "edad": "45",
+    "email": "dsadsa@fsa.dsa",
+    "password": "546546",
+    "numero": "4654654"
+  }
+]

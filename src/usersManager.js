@@ -1,102 +1,52 @@
-import { promises as fspromises } from "fs"
-import crypto from "crypto"
+import fs from "fs/promises";
 
-export const guardarUsuarios = async (usuarios) => {
+const path = "./usuarios.json";
+
+export async function conseguirUsuarios() {
     try {
-        await fspromises.writeFile("usuarios.json", JSON.stringify(usuarios, null, 2), "utf-8")
-        console.log("usuarios guardados")
-    }
-    catch (error) {
-        console.log("error al guardar", error)
-    }
-}
-
-export const conseguirUsuarios = async () => {
-    try {
-        const data = await fspromises.readFile("usuarios.json", "utf-8")
-        return JSON.parse(data)
-    }
-    catch (error) {
-        if (error.code === "ENOENT") {
-            await guardarUsuarios([])
-        }
-        console.log("error")
-        return []
+        const data = await fs.readFile(path, "utf-8");
+        return JSON.parse(data);
+    } catch {
+        return [];
     }
 }
 
-export const conseguirUsuario = async (id) => {
-    try {
-        const lista = await conseguirUsuarios()
-        const usuario = lista.find(item => item.id === id)
-        if (!usuario) { return {} }
-        return usuario
-    }
-    catch (error) {
-        console.log("error")
-    }
+export async function conseguirUsuario(id) {
+    const usuarios = await conseguirUsuarios();
+    return usuarios.find(u => u.id === Number(id));
 }
 
-export const agregarUsuario = async (usuario) => {
-    try {
+export async function agregarUsuario(usuario) {
+    const usuarios = await conseguirUsuarios();
 
-        const listaActual = await conseguirUsuarios()
-        const id = crypto.randomUUID()
-        const existe = listaActual.some(item => item.telefono === usuario.telefono &&
-            item.nombre === usuario.nombre
-        )
-        if (existe) {
-            return console.log("usuario ya existe")
-        }
-        listaActual.push({ id, ...usuario })
-        await guardarUsuarios(listaActual)
-    }
-    catch (error) { console.log("error") }
+    const existe = usuarios.find(u => u.email === usuario.email);
+    if (existe) return null;
+
+    const nuevo = {
+        id: Date.now(),
+        ...usuario
+    };
+
+    usuarios.push(nuevo);
+    await fs.writeFile(path, JSON.stringify(usuarios, null, 2));
+    return nuevo;
 }
 
-export const actualizarUsuario = async (id, actualizarUser) => {
-    try {
-        const usuarios = await conseguirUsuarios()
-        const existe = usuarios.find(usuario => usuario.id === id)
-        if (!existe) {
-            console.log("el usuario no existe")
-            return null
-        }
-        const listaActualizada = usuarios.map(usuario => {
+export async function actualizarUsuario(id, data) {
+    const usuarios = await conseguirUsuarios();
+    const index = usuarios.findIndex(u => u.id === Number(id));
+    if (index === -1) return null;
 
-            if (usuario.id === id) {
-                if (actualizarUser.nombre) usuario.nombre = actualizarUser.nombre
-                if (actualizarUser.telefono) usuario.telefono = actualizarUser.telefono
-                if (actualizarUser.apellido) usuario.apellido = actualizarUser.apellido
-            }
-            return usuario
-        })
-        await guardarUsuarios(listaActualizada)
-    }
-    catch (error) {
-        console.log(error, "error")
-    }
+    usuarios[index] = { ...usuarios[index], ...data };
+    await fs.writeFile(path, JSON.stringify(usuarios, null, 2));
+    return usuarios[index];
 }
 
-export const borrarUsuario=async (id)=>{
-    try{
-        const usuarios = await conseguirUsuarios()
-        const existe = usuarios.find(usuario => usuario.id === id)
-                if (!existe) {
-            console.log("el usuario no existe")
-            return null
-        }
-        const eliminarUsuario=usuarios.filter(usuario=>usuario.id !== id)
-        await guardarUsuarios(eliminarUsuario)
-    }
-    catch(error){
-        console.log("error al eliminar usuario")
-    }
+export async function borrarUsuario(id) {
+    const usuarios = await conseguirUsuarios();
+    const filtrados = usuarios.filter(u => u.id !== Number(id));
+    if (usuarios.length === filtrados.length) return false;
 
+    await fs.writeFile(path, JSON.stringify(filtrados, null, 2));
+    return true;
 }
-const init = async () => {
-await borrarUsuario("a8a14a84-4952-40ab-b8c1-692e800d38cd"
-)
-
-}
-init()
