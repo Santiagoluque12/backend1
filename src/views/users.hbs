@@ -1,5 +1,6 @@
 <main>
     <h1>Perfiles de Usuarios</h1>
+    <div class="cards">
     {{#each usersList}}
     <div class="card">
         <h2>{{this.nombre}}</h2>
@@ -8,4 +9,5 @@
         <h5>Teléfono: {{this.numero}}</h5>
     </div>
     {{/each}}
+    </div>
 </main>

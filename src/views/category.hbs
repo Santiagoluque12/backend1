@@ -1,0 +1,10 @@
+<main>
+    <h1>carrito</h1>
+        <div class="cards">
+    {{#each categoryList}}
+    <div class="card">
+        <h2>{{this.nombre}}</h2>
+        <h3>descripcion: {{this.descripcion}}</h3>
+    </div>
+    {{/each}}
+</main>
